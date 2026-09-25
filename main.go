@@ -1,30 +1,36 @@
 package main
 
-import "fmt"
+import (
+	"flag"
+	"fmt"
+	"os"
+)
 
-func reverse(arr *[]int) {
-	if arr == nil || len(*arr) <= 1 {
+func main() {
+	topCount := flag.Int("top", 5, "Количество слов для вывода в топе наиболее часто встречающихся")
+	linesOnly := flag.Bool("l", false, "Выводить только общее количество строк в файле")
+
+	flag.Parse()
+
+	args := flag.Args()
+
+	if len(args) < 1 {
+		fmt.Println("Ошибка: не указан путь к файлу.")
+		fmt.Println("Использование: go run main.go [-top=N] [-l] <путь_к_файлу>")
+		os.Exit(1)
+	}
+
+	filePath := args[0]
+
+	linesCount := 42 
+	fmt.Printf("(Читаем файл: %s)\n\n", filePath)
+
+	if *linesOnly {
+		fmt.Println(linesCount)
 		return
 	}
 
-	s := *arr
+	fmt.Printf("Общее количество строк: %d\n", linesCount)
 
-	left := 0
-	right := len(s) - 1
-
-	for left < right {
-		s[left], s[right] = s[right], s[left]
-
-		left++
-		right--
-	}
-}
-
-func main() {
-	s := []int{1, 2, 3, 4, 5}
-	fmt.Println("До реверса:", s)
-
-	reverse(&s)
-
-	fmt.Println("После реверса:", s)
+	fmt.Printf("Топ-%d популярных слов:\n", *topCount)
 }
